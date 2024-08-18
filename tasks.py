@@ -5,9 +5,6 @@ from RPA.HTTP import HTTP
 from RPA.Tables import Tables
 from RPA.PDF import PDF
 from RPA.Archive import Archive
-import zipfile
-import os
-
 
 
 @task
@@ -21,7 +18,7 @@ def order_robots_from_RobotSpareBin():
 
     """
     browser.configure(
-        slowmo=1000,
+        slowmo=100,
     )
     get_orders()
     orders = get_orders()
@@ -132,17 +129,10 @@ def fill_the_order_form(orders):
             check_error(order_number)
 
 
-
 def archive_receipts():
     """Archives all the receipts into a zip file"""
-    receipts_dir = "D:/ROBOCORP/Level II/Make Robot Order/output/receipts"
-    archive_name = "D:/ROBOCORP/Level II/Make Robot Order/output/receipts.zip"
-    
-    with zipfile.ZipFile(archive_name, 'w', zipfile.ZIP_DEFLATED) as zipf:
-        for root, dirs, files in os.walk(receipts_dir):
-            for file in files:
-                file_path = os.path.join(root, file)
-                zipf.write(file_path, os.path.relpath(file_path, receipts_dir))
+    lib = Archive()
+    lib.archive_folder_with_zip("./output/receipts", "./output/receipts.zip", recursive=True)
 
     
 
